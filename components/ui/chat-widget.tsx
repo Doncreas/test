@@ -1,11 +1,13 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { MessageCircle, SendHorizonal, Sparkles } from 'lucide-react';
+import { MessageCircle, SendHorizonal, Sparkles, Volume2 } from 'lucide-react';
 import { useState } from 'react';
+import { VoiceButton } from '@/components/chat/VoiceButton';
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
+  const [listening, setListening] = useState(false);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -30,11 +32,22 @@ export function ChatWidget() {
               <div className="max-w-[85%] rounded-2xl bg-[#f5e8d5] p-3 text-ink">Habari! I can book your ride and track your flight.</div>
               <div className="ml-auto max-w-[85%] rounded-2xl bg-sage p-3 text-white">Book a ride from JRO for 3am.</div>
             </div>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <VoiceButton isListening={listening} onToggle={() => setListening((v) => !v)} />
+              <button type="button" className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+                <Volume2 size={14} />
+                Talk to human
+              </button>
+            </div>
             <div className="mt-4 flex items-center gap-2 rounded-full border border-sage/10 bg-cream p-2">
               <input className="flex-1 bg-transparent px-3 py-2 text-sm outline-none" placeholder="Tell me your flight and route" />
               <button className="rounded-full bg-sunset p-2 text-white" aria-label="Send message">
                 <SendHorizonal size={16} />
               </button>
+            </div>
+            <div className="mt-3 flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
+              <span>Accessibility: voice enabled</span>
+              <span>High contrast mode</span>
             </div>
           </motion.div>
         ) : null}

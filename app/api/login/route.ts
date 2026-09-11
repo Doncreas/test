@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { AuthError } from 'next-auth';
+import { signIn } from '@/auth';
 
 export async function POST(req: Request) {
   try {
@@ -9,13 +11,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Email and password required' }, { status: 400 });
     }
 
-    // NOTE: This is a stub. Replace with real auth logic.
-    if (email === 'demo@tanzalift.test' && password === 'password') {
-      return NextResponse.json({ ok: true, user: { email, name: 'Demo User' } });
+    await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+      redirectTo: '/dashboard',
+    });
+
+    return NextResponse.json({ ok: true, redirectTo: '/dashboard' });
+  } catch (error) {
+    if (error instanceof AuthError && error.type === 'CredentialsSignin') {
+      return NextResponse.json({ ok: false, error: 'Invalid email or password' }, { status: 401 });
     }
 
-    return NextResponse.json({ ok: false, error: 'Invalid credentials' }, { status: 401 });
-  } catch (err) {
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }

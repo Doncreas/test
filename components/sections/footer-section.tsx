@@ -6,14 +6,32 @@ const companyLinks = ['About', 'Careers', 'Press', 'Contact'];
 const serviceLinks = ['Airport', 'Tours', 'Corporate', 'Long-distance'];
 const supportLinks = ['Help', 'Safety', 'Driver program', 'Partners'];
 const legalLinks = ['Privacy', 'Terms', 'Cookies', 'Imprint'];
+
+// These informational pages are not built yet; keep their links as placeholders until the content routes exist.
+const travelerLinks = [
+  { label: 'Book a Ride', href: '/book' },
+  { label: 'Transaction', href: '/wallet/history' },
+  { label: 'Karibu Pass', href: '/pass' },
+  { label: 'Rewards Program', href: '/rewards' },
+];
+const businessLinks = [
+  { label: 'Corporate Accounts', href: '/corporate' },
+  { label: 'Become a Driver', href: '/driver/onboarding' },
+  { label: 'Hotel Partners', href: '/partners/hotel' },
+  { label: 'Creator Partners', href: '/partners/influencer' },
+];
+const trustLinks = [
+  { label: 'Safety Center', href: '/safety' },
+  { label: 'FAQ', href: '#faq' },
+];
 const payments = ['M-Pesa', 'Visa', 'Mastercard', 'Tigo', 'Airtel', 'PayPal'];
 
 export function FooterSection() {
   return (
     <footer className="bg-ink text-white">
       <div className="container-shell py-16 lg:py-20">
-        <div className="grid gap-10 lg:grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr_0.8fr]">
-          <div>
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-8">
+          <div className="xl:col-span-2">
             <div className="flex items-center gap-3 text-xl font-black">
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-sunset to-gold text-white">✈</div>
               <div>
@@ -52,6 +70,24 @@ export function FooterSection() {
             <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/60">Legal</h3>
             <ul className="mt-5 space-y-3 text-sm text-white/75">
               {legalLinks.map((link) => <li key={link}><a href="#" className="transition hover:text-white">{link}</a></li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/60">For Travelers</h3>
+            <ul className="mt-5 space-y-3 text-sm text-white/75">
+              {travelerLinks.map((link) => <li key={link.href}><a href={link.href} className="transition hover:text-white">{link.label}</a></li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/60">For Business</h3>
+            <ul className="mt-5 space-y-3 text-sm text-white/75">
+              {businessLinks.map((link) => <li key={link.href}><a href={link.href} className="transition hover:text-white">{link.label}</a></li>)}
+            </ul>
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.25em] text-white/60">Trust &amp; Safety</h3>
+            <ul className="mt-5 space-y-3 text-sm text-white/75">
+              {trustLinks.map((link) => <li key={link.href}><a href={link.href} className="transition hover:text-white">{link.label}</a></li>)}
             </ul>
           </div>
         </div>

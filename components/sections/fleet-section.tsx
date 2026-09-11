@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { ArrowRight, BriefcaseBusiness, Snowflake, Users, Wifi } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const fleet = [
   {
@@ -73,9 +74,9 @@ export function FleetSection() {
                     <p className="text-xs uppercase tracking-[0.2em] text-sage">From</p>
                     <p className="text-lg font-black text-ink">{item.price}</p>
                   </div>
-                  <button className="flex h-11 w-11 items-center justify-center rounded-full bg-sage text-white" aria-label={`Select ${item.title}`}>
+                  <Link href={`/book?vehicle=${item.title.startsWith('Sedan') ? 'sedan' : item.title.startsWith('SUV') ? 'suv' : item.title.startsWith('Land Cruiser') ? 'land-cruiser' : 'van'}`} className="flex h-11 w-11 items-center justify-center rounded-full bg-sage text-white transition hover:bg-sage/90" aria-label={`Select ${item.title}`}>
                     <ArrowRight size={16} />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </motion.article>

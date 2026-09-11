@@ -1,3 +1,5 @@
+@import 'leaflet/dist/leaflet.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -50,4 +52,86 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.tracking-map {
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  background: #0a0a0a;
+}
+
+.tracking-map.leaflet-container {
+  height: 100%;
+  width: 100%;
+}
+
+.tracking-map .tracking-osm-tiles {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9);
+}
+
+.tracking-map .leaflet-control-attribution {
+  background: rgba(10, 10, 10, 0.75);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.tracking-map .leaflet-control-attribution a {
+  color: #ffb078;
+}
+
+.tracking-marker-icon {
+  background: transparent;
+  border: 0;
+}
+
+.tracking-driver-marker {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  transform-origin: center;
+  transition: transform 0.3s ease-out;
+}
+
+.tracking-driver-glow {
+  animation: tracking-pulse 2s ease-in-out infinite;
+}
+
+.tracking-pickup-marker {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.tracking-pickup-pulse,
+.tracking-pickup-dot {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+}
+
+.tracking-pickup-pulse {
+  width: 34px;
+  height: 34px;
+  border: 2px solid #ff7a1a;
+  animation: tracking-pulse-ring 2s ease-out infinite;
+}
+
+.tracking-pickup-dot {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #fff;
+  background: #ff7a1a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes tracking-pulse {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.45; }
+}
+
+@keyframes tracking-pulse-ring {
+  0% { opacity: 0.9; transform: translate(-50%, -50%) scale(0.65); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1.25); }
 }

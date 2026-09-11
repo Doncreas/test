@@ -1,0 +1,109 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+enum UserRole {
+  rider
+  driver
+  corporate_admin
+  admin
+}
+
+enum WalletTransactionType {
+  topup
+  payment
+  refund
+  transfer
+}
+
+enum PointsTier {
+  bronze
+  silver
+  gold
+  platinum
+  diamond
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  in_progress
+  completed
+  cancelled
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String?
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(rider)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  wallet       Wallet?
+  points       UserPoints?
+  bookings     Booking[]
+}
+
+model Wallet {
+  id           String              @id @default(cuid())
+  userId       String              @unique
+  balanceTzs   Int                 @default(0)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions WalletTransaction[]
+}
+
+model WalletTransaction {
+  id           String                @id @default(cuid())
+  walletId     String
+  type         WalletTransactionType
+  amountTzs    Int
+  balanceAfter Int
+  reference    String
+  createdAt    DateTime              @default(now())
+  wallet       Wallet                @relation(fields: [walletId], references: [id], onDelete: Cascade)
+}
+
+model UserPoints {
+  id             String             @id @default(cuid())
+  userId         String             @unique
+  balance        Int                @default(0)
+  tier           PointsTier         @default(bronze)
+  lifetimeEarned Int                @default(0)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions   PointTransaction[]
+}
+
+model PointTransaction {
+  id           String     @id @default(cuid())
+  userPointsId String
+  amount       Int
+  source       String
+  balanceAfter Int
+  createdAt    DateTime   @default(now())
+  userPoints   UserPoints @relation(fields: [userPointsId], references: [id], onDelete: Cascade)
+}
+
+model Booking {
+  id          String        @id @default(cuid())
+  userId      String
+  pickup      String
+  dropoff     String
+  status      BookingStatus @default(pending)
+  vehicleType String
+  priceTzs    Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

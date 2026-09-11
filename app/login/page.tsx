@@ -2,9 +2,12 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import { ArrowLeft, Eye, EyeOff, Lock, Mail, Sparkles } from 'lucide-react';
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -15,19 +18,21 @@ export default function LoginPage() {
     setLoading(true);
     setMessage(null);
     try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        redirectTo: '/dashboard',
       });
-      const data = await res.json();
-      if (res.ok && data.ok) {
-        setMessage('Signed in — welcome back!');
+
+      if (result?.ok) {
+        router.push('/dashboard');
+        router.refresh();
       } else {
-        setMessage(data.error || 'Sign in failed');
+        setMessage(result?.error === 'CredentialsSignin' ? 'Invalid email or password' : 'Sign in failed');
       }
-    } catch (err) {
-      setMessage('Network error');
+    } catch (error) {
+      setMessage('Unable to sign in right now');
     } finally {
       setLoading(false);
     }
